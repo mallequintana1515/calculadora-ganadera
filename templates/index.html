@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥛 Calculadora Ganadera - Producción de Leche</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .results {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .result-label {
+            font-weight: 600;
+            color: #333;
+        }
+        .result-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+        .emoji {
+            margin-right: 10px;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🥛 Calculadora Ganadera</h1>
+
+        <div id="error-message" class="error"></div>
+
+        <form id="calculator-form">
+            <div class="form-group">
+                <label for="vacas">🐄 Número de vacas:</label>
+                <input type="number" id="vacas" name="vacas" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="litros_por_vaca">🥛 Litros por vaca por día:</label>
+                <input type="number" id="litros_por_vaca" name="litros_por_vaca" min="0" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="precio_litro">💰 Precio por litro ($):</label>
+                <input type="number" id="precio_litro" name="precio_litro" min="0" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gastos">💸 Gastos totales diarios ($):</label>
+                <input type="number" id="gastos" name="gastos" min="0" step="0.01" required>
+            </div>
+
+            <button type="submit" class="btn">📊 Calcular</button>
+        </form>
+
+        <div id="results" class="results">
+            <h2 style="text-align: center; color: #333;">📊 Resultados Diarios</h2>
+
+            <div class="result-item">
+                <span class="result-label">🐄 Número de vacas:</span>
+                <span id="result-vacas" class="result-value"></span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">🥛 Litros por vaca:</span>
+                <span id="result-litros-vaca" class="result-value"></span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">📦 Litros totales producidos:</span>
+                <span id="result-litros-totales" class="result-value"></span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">💰 Precio por litro:</span>
+                <span id="result-precio" class="result-value"></span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">💵 Ingresos totales:</span>
+                <span id="result-ingresos" class="result-value"></span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">💸 Gastos totales:</span>
+                <span id="result-gastos" class="result-value"></span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">📈 Ganancia neta:</span>
+                <span id="result-ganancia" class="result-value"></span>
+            </div>
+
+            <h3 style="text-align: center; color: #333; margin-top: 30px;">📅 Proyecciones</h3>
+
+            <div class="result-item">
+                <span class="result-label">📊 Ganancia mensual (30 días):</span>
+                <span id="result-mensual" class="result-value"></span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">📊 Ganancia anual (365 días):</span>
+                <span id="result-anual" class="result-value"></span>
+            </div>
+
+            <h3 style="text-align: center; color: #333; margin-top: 30px;">⚡ Eficiencia</h3>
+
+            <div class="result-item">
+                <span class="result-label">💡 Ingreso por vaca:</span>
+                <span id="result-ingreso-vaca" class="result-value"></span>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">💡 Ganancia por vaca:</span>
+                <span id="result-ganancia-vaca" class="result-value"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculator-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+
+            // Validación básica
+            if (parseInt(data.vacas) <= 0) {
+                showError('El número de vacas debe ser mayor que 0');
+                return;
+            }
+            if (parseFloat(data.litros_por_vaca) <= 0) {
+                showError('Los litros por vaca deben ser mayor que 0');
+                return;
+            }
+            if (parseFloat(data.precio_litro) < 0) {
+                showError('El precio no puede ser negativo');
+                return;
+            }
+            if (parseFloat(data.gastos) < 0) {
+                showError('Los gastos no pueden ser negativos');
+                return;
+            }
+
+            hideError();
+
+            // Cálculos
+            const litrosTotales = parseInt(data.vacas) * parseFloat(data.litros_por_vaca);
+            const ingresos = litrosTotales * parseFloat(data.precio_litro);
+            const ganancia = ingresos - parseFloat(data.gastos);
+
+            // Mostrar resultados
+            document.getElementById('result-vacas').textContent = parseInt(data.vacas);
+            document.getElementById('result-litros-vaca').textContent = parseFloat(data.litros_por_vaca).toFixed(2) + ' L';
+            document.getElementById('result-litros-totales').textContent = litrosTotales.toFixed(2) + ' L';
+            document.getElementById('result-precio').textContent = '$' + parseFloat(data.precio_litro).toFixed(2);
+            document.getElementById('result-ingresos').textContent = '$' + ingresos.toFixed(2);
+            document.getElementById('result-gastos').textContent = '$' + parseFloat(data.gastos).toFixed(2);
+            document.getElementById('result-ganancia').textContent = '$' + ganancia.toFixed(2);
+
+            document.getElementById('result-mensual').textContent = '$' + (ganancia * 30).toFixed(2);
+            document.getElementById('result-anual').textContent = '$' + (ganancia * 365).toFixed(2);
+
+            document.getElementById('result-ingreso-vaca').textContent = '$' + (ingresos / parseInt(data.vacas)).toFixed(2) + '/día';
+            document.getElementById('result-ganancia-vaca').textContent = '$' + (ganancia / parseInt(data.vacas)).toFixed(2) + '/día';
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('error-message').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
