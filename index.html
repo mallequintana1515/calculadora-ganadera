@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Ganadera</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<header>
+    <h1 class="titulo">Calculadora Ganadera</h1>
+</header>
+
+<div id="loginModal" class="modal" aria-hidden="true">
+    <div class="modal-contenido" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <h3 id="loginTitle">Iniciar sesión</h3>
+        <label for="loginUsuario">Usuario</label>
+        <input type="text" id="loginUsuario" placeholder="Nombre de usuario" autocomplete="username">
+        <label for="loginContrasena">Contraseña</label>
+        <input type="password" id="loginContrasena" placeholder="Contraseña" autocomplete="current-password">
+        <div class="modal-botones">
+            <button id="btnEnviarLogin" type="button" class="boton-opcion">Aceptar</button>
+            <button id="btnCerrarLogin" type="button" class="boton-cancelar">Cancelar</button>
+        </div>
+        <p id="loginMensaje" class="mensaje-login" role="status"></p>
+    </div>
+</div>
+
+<nav class="barra-navegacion">
+    <div class="nav-enlaces" role="group" aria-label="Secciones principales">
+        <button type="button" class="nav-tab" data-target="info" aria-pressed="false">Información</button>
+        <button type="button" class="nav-tab is-active" data-target="calculadora" aria-pressed="true">Calculadora</button>
+        <button type="button" class="nav-tab" data-target="contacto" aria-pressed="false">Contacto</button>
+    </div>
+    <div class="nav-acciones">
+        <button id="btnLogin" type="button">Iniciar sesión</button>
+        <button id="btnGlosario" type="button" class="nav-glosario" aria-controls="glosarioModal" aria-haspopup="dialog" aria-expanded="false">Glosario</button>
+    </div>
+</nav>
+
+<main class="app-shell">
+    <section id="info" class="panel panel-vista" data-view="info" hidden>
+        <h2>Información</h2>
+        <p>Esta calculadora te ayuda a estimar la producción diaria y el valor total según el animal, la cantidad y el precio por unidad.</p>
+        <ul class="lista-bullets">
+            <li>Selecciona el animal.</li>
+            <li>Habilita la cantidad y escribe el dato.</li>
+            <li>Habilita el precio y completa el valor.</li>
+            <li>Calcula el total con un solo clic.</li>
+        </ul>
+    </section>
+
+    <section id="calculadora" class="panel panel-vista" data-view="calculadora">
+        <h2>Opciones de Producción</h2>
+        <label for="animal">Selecciona el animal:</label>
+        <select id="animal">
+            <option value="">-- Elegir --</option>
+            <option value="Vaca">Vaca</option>
+            <option value="Cerdo">Cerdo</option>
+            <option value="Pollo">Pollo</option>
+        </select>
+
+        <button id="btnCantidad" type="button" class="boton-opcion">2. Habilitar cantidad</button>
+
+        <label for="produccion">Tipo de producción:</label>
+        <input type="text" id="produccion" readonly placeholder="Se llenará automáticamente">
+
+        <button id="btnProducto" type="button" class="boton-opcion">3. Mostrar producto</button>
+
+        <label for="cantidad">Cantidad producida por día:</label>
+        <input type="number" id="cantidad" min="0" placeholder="Ej: 50" disabled>
+
+        <button id="btnPrecio" type="button" class="boton-opcion">4. Habilitar precio</button>
+
+        <label for="precio">Precio por unidad:</label>
+        <input type="number" id="precio" min="0" step="0.01" placeholder="Ej: 12.50" disabled>
+
+        <button id="btnCopiarPrecio" type="button" class="boton-opcion">Copiar precio</button>
+
+        <button id="btnCalcular" type="button" class="boton-opcion">5. Calcular total</button>
+
+        <p id="respuesta"></p>
+    </section>
+
+    <section id="contacto" class="panel panel-vista" data-view="contacto" hidden>
+        <h2>Contacto</h2>
+
+        <form id="formContacto">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" required>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" required placeholder="Ej: +1234567890">
+
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" required>
+
+            <button type="submit">Enviar</button>
+        </form>
+
+        <a href="https://wa.me/3044247299?text=Hola, quiero información sobre la calculadora ganadera" target="_blank" class="boton-opcion">Contactar por WhatsApp</a>
+
+        <p id="mensaje"></p>
+    </section>
+</main>
+
+<div id="glosarioModal" class="modal" aria-hidden="true">
+    <div class="modal-contenido modal-contenido-glosario" role="dialog" aria-modal="true" aria-labelledby="glosarioTitle">
+        <div class="glosario-topbar">
+            <h2 id="glosarioTitle">Glosario Ganadero</h2>
+            <button id="btnCerrarGlosario" type="button" class="boton-cerrar">Cerrar</button>
+        </div>
+
+        <input type="text" id="buscadorGlosario" placeholder="Buscar término...">
+
+        <ul id="listaGlosario">
+            <li><strong>Producción diaria:</strong> Cantidad de leche, carne, huevos o kilos que genera un animal en un día.</li>
+            <li><strong>Engorde:</strong> Proceso de aumento de peso del animal hasta alcanzar un valor comercial.</li>
+            <li><strong>Precio por unidad:</strong> Valor asignado a cada litro, kilo o pieza producida.</li>
+            <li><strong>Rendimiento:</strong> Relación entre la producción obtenida y los recursos utilizados.</li>
+            <li><strong>Conversión alimenticia:</strong> Cantidad de alimento necesaria para producir un kilo de producto.</li>
+            <li><strong>Ganado bovino:</strong> Conjunto de vacas, toros y novillos destinados a carne o leche.</li>
+            <li><strong>Porcicultura:</strong> Actividad dedicada a la cría y producción de cerdos.</li>
+            <li><strong>Avicultura:</strong> Producción de aves como pollos, gallinas y pavos.</li>
+            <li><strong>Levantamiento:</strong> Etapa de crecimiento antes de entrar a producción o engorde.</li>
+            <li><strong>Comercialización:</strong> Proceso de vender y distribuir los productos del campo.</li>
+            <li><strong>Trazabilidad:</strong> Seguimiento del animal desde su origen hasta la venta.</li>
+            <li><strong>Pastoreo:</strong> Sistema de alimentación basado en el consumo de pasto natural.</li>
+            <li><strong>Forraje:</strong> Planta o alimento vegetal usado para alimentar al ganado.</li>
+            <li><strong>Ración:</strong> Porción diaria de alimento suministrada al animal.</li>
+            <li><strong>Silo:</strong> Almacenamiento de alimento conservado para épocas de escasez.</li>
+            <li><strong>Ensilaje:</strong> Técnica para conservar forrajes mediante fermentación controlada.</li>
+            <li><strong>Suplementación:</strong> Aporte extra de minerales, proteínas o energía a la dieta.</li>
+            <li><strong>Peso vivo:</strong> Peso total del animal antes del sacrificio o venta.</li>
+            <li><strong>Peso canal:</strong> Peso de la carne obtenida después del sacrificio.</li>
+            <li><strong>Destete:</strong> Momento en que la cría deja de alimentarse de la madre.</li>
+            <li><strong>Parto:</strong> Nacimiento de la cría al final de la gestación.</li>
+            <li><strong>Gestación:</strong> Periodo en el que la cría se desarrolla dentro de la madre.</li>
+            <li><strong>Fertilidad:</strong> Capacidad del animal para reproducirse con éxito.</li>
+            <li><strong>Reproducción:</strong> Proceso por el cual se obtienen nuevas crías.</li>
+            <li><strong>Inseminación artificial:</strong> Técnica de reproducción asistida para mejorar genética y control.</li>
+            <li><strong>Sanidad animal:</strong> Conjunto de prácticas para mantener la salud del ganado.</li>
+            <li><strong>Vacunación:</strong> Aplicación de vacunas para prevenir enfermedades.</li>
+            <li><strong>Desparasitación:</strong> Tratamiento para eliminar parásitos internos o externos.</li>
+            <li><strong>Bioseguridad:</strong> Medidas para evitar la entrada y propagación de enfermedades.</li>
+            <li><strong>Lactancia:</strong> Periodo en el que la cría recibe leche de la madre.</li>
+            <li><strong>Ordeño:</strong> Extracción de leche de la vaca de forma manual o mecánica.</li>
+            <li><strong>Calidad de leche:</strong> Características sanitarias y nutricionales del producto obtenido.</li>
+            <li><strong>Brucelosis:</strong> Enfermedad bacteriana que afecta la reproducción y la producción.</li>
+            <li><strong>Mastitis:</strong> Inflamación de la ubre que reduce la calidad de la leche.</li>
+            <li><strong>Ganancia de peso:</strong> Incremento de kilos que logra el animal en un periodo.</li>
+            <li><strong>Ceba:</strong> Fase de alimentación intensiva para llevar el animal a mercado.</li>
+            <li><strong>Hato:</strong> Grupo de animales que pertenecen a una misma finca o explotación.</li>
+            <li><strong>Potrero:</strong> Terreno cercado donde se mantiene el ganado para pastar.</li>
+            <li><strong>Bebedero:</strong> Lugar o recipiente donde los animales toman agua.</li>
+            <li><strong>Comedero:</strong> Estructura donde se coloca el alimento para el ganado.</li>
+            <li><strong>Control sanitario:</strong> Revisión periódica del estado de salud del rebaño.</li>
+            <li><strong>Registro productivo:</strong> Anotación de datos como producción, pesos, partos y ventas.</li>
+            <li><strong>Mermas:</strong> Pérdidas de producto durante almacenamiento, transporte o venta.</li>
+            <li><strong>Costo de producción:</strong> Suma de los gastos necesarios para producir.</li>
+            <li><strong>Punto de equilibrio:</strong> Nivel en el que ingresos y gastos quedan iguales.</li>
+            <li><strong>Margen de ganancia:</strong> Diferencia positiva entre el costo y el precio de venta.</li>
+            <li><strong>Valor agregado:</strong> Mejoras que aumentan el valor comercial del producto.</li>
+            <li><strong>Clasificación por edades:</strong> Orden de los animales según su etapa de desarrollo.</li>
+            <li><strong>Manejo animal:</strong> Forma correcta de manipular y mover el ganado con cuidado.</li>
+            <li><strong>Crianza:</strong> Cuidado y alimentación de animales desde su nacimiento.</li>
+            <li><strong>Recría:</strong> Etapa de crecimiento intermedia antes del engorde final.</li>
+            <li><strong>Genética:</strong> Características heredadas que influyen en producción y resistencia.</li>
+            <li><strong>Selección:</strong> Elección de los mejores animales para reproducción o producción.</li>
+            <li><strong>Cuarentena:</strong> Aislamiento temporal de animales nuevos o enfermos.</li>
+            <li><strong>Bienestar animal:</strong> Condiciones adecuadas de espacio, alimento, agua y trato.</li>
+        </ul>
+    </div>
+</div>
+
+<footer>
+    <p>Proyecto Calculadora Ganadera - 2026</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
